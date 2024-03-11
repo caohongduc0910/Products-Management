@@ -1,0 +1,26 @@
+mixin pagination(pagination)
+  nav
+    ul(class="pagination")
+
+      if(objectPagination.currentPage != 1)
+        li(class="page-item")
+          button(
+          class="page-link"
+          page-index=parseInt(objectPagination.currentPage)-1
+          ) Trang trước
+
+      - for (var i = 1; i <= objectPagination.totalPages; i++) 
+          li(class="page-item")
+            button(
+              class=`page-link ${i==objectPagination.currentPage?"active":""}`
+              page-index=i
+              ) #{i}
+
+      if(objectPagination.currentPage < objectPagination.totalPages)
+        li(
+          class="page-item")
+          button(
+            class="page-link"
+            page-index=parseInt(objectPagination.currentPage)+1
+            ) Kế tiếp
+  
