@@ -2,16 +2,15 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
-
 block main 
 
   +alertSuccess(5000)
   +alertFail(5000)
 
-  h1(class="mb-4") Chỉnh sửa sản phẩm
+  h1(class="mb-4") Chỉnh sửa danh mục sản phẩm 
 
   form(
-  action=`${prefixAdmin}/products/edit/${singleItem.id}?_method=PATCH`
+  action=`${prefixAdmin}/products-categories/edit/${singleItem.id}?_method=PATCH`
     id="form-edit-product"
     method="POST"
     enctype="multipart/form-data"
@@ -26,16 +25,17 @@ block main
         required
         value=singleItem.title
       )
+
     div(class="form-group")
-      label(for="product_category_id") Danh mục
+      label(for="parent_id") Danh mục
       select(
-        name="product_category_id"
-        id="product_category_id"
+        name="parent_id"
+        id="parent_id"
         class="form-control"
       )
         option(value="") -- Chọn danh mục --
         if(newProductCategory)
-          +select-tree(newProductCategory, 1, singleItem.product_category_id)
+          +select-tree(newProductCategory, 1, singleItem.parent_id)
     //- div(class="form-group form-check form-check-inline")
     //-   input(
     //-     type="radio"
@@ -55,6 +55,7 @@ block main
     //-     checked
     //-   )
     //-   label(for="featured0" class="form-check-label") Không
+    
     div(class="form-group")
       label(for="desc") Mô tả
       textarea(
@@ -62,38 +63,9 @@ block main
         id="desc"
         name="description"
         rows="5"
-        textarea-mce
+        textarea
       ) !{singleItem.description}
-    div(class="form-group")
-      label(for="price") Giá
-      input(
-        type="number"
-        class="form-control"
-        id="price"
-        name="price"
-        value=singleItem.price
-        min="0"
-      )
-    div(class="form-group")
-      label(for="discount") % Giảm giá
-      input(
-        type="number"
-        class="form-control"
-        id="discount"
-        name="discountPercentage"
-        value=singleItem.discountPercentage
-        min="0"
-      )
-    div(class="form-group")
-      label(for="stock") Số lượng
-      input(
-        type="number"
-        class="form-control"
-        id="stock"
-        name="stock"
-        value=singleItem.stock
-        min="0"
-      )
+
     div(class="form-group" 
     upload-image
     )

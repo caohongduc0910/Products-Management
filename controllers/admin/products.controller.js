@@ -1,9 +1,12 @@
 const Product = require("../../models/product.model.js")
+const ProductCategory = require("../../models/products-categories.model.js")
+
+const systemConfig = require("../../config/prefix.js")
 
 const filterStatusHelper = require("../../helpers/filterStatus.js")
 const searchHelper = require("../../helpers/search.js")
 const paginationHelper = require("../../helpers/pagination.js")
-const systemConfig = require("../../config/prefix.js")
+const createTree = require("../../helpers/create-tree.js")
 
 // [GET] /admin/products
 
@@ -22,7 +25,6 @@ module.exports.index = async (req, res) => {
 
   //Search
   const searchObject = searchHelper(req.query)
-
   if (searchObject.regex) {
     find.title = searchObject.regex
   }
@@ -31,15 +33,21 @@ module.exports.index = async (req, res) => {
   const count = await Product.countDocuments(find)
   const objectPagination = paginationHelper(req.query, count)
 
+  //Sort
+  let sort = {}
+  if(req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue
+  }else {
+    sort.position = "desc"
+  }
 
   //Render data
   const products = await Product.find(find)
-    .sort({ position: "desc" })
+    .sort(sort)
     .limit(objectPagination.limitItems)
-    .skip(objectPagination.startItem)
+    .skip(objectPagination.startItem) 
 
   res.render("admin/pages/products/index.pug", {
-
     pageTitle: 'Danh sách sản phẩm',
     products: products,
     filterStatus: filterStatus,
@@ -56,8 +64,6 @@ module.exports.changeStatus = async (req, res) => {
   const status = req.params.status
 
   req.flash('success', 'Cập nhật trạng thái thành công');
-
-  // console.log(req.params)
 
   await Product.updateOne({ _id: id }, { status: status })
 
@@ -126,22 +132,33 @@ module.exports.deleteItem = async (req, res) => {
 }
 
 // [GET] /admin/products/create
-module.exports.createGet = (req, res) => {
+module.exports.createGet = async (req, res) => {
+
+  let find = {
+    deleted: false
+  }
+
+  const productCategory = await ProductCategory.find(find)
+  const newProductCategory = createTree(productCategory)
+
   res.render("admin/pages/products/create.pug", {
-    pageTitle: 'Tạo mới sản phẩm'
+    pageTitle: 'Tạo mới sản phẩm',
+    newProductCategory: newProductCategory
   })
 }
 
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
 
+  console.log(req.body)
+
   req.body.price = parseInt(req.body.price)
   req.body.discountPercentage = parseInt(req.body.discountPercentage)
   req.body.stock = parseInt(req.body.stock)
 
-  if (req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`
-  }
+  // if (req.file) {
+  //   req.body.thumbnail = `/uploads/${req.file.filename}`
+  // }
 
   const count = await Product.countDocuments();
 
@@ -154,7 +171,7 @@ module.exports.createPost = async (req, res) => {
   const newProduct = new Product(req.body)
   await newProduct.save()
 
-  console.log(req.file)
+  // console.log(req.file)
 
   res.redirect(`${systemConfig.prefixAdmin}/products`)
 
@@ -169,11 +186,18 @@ module.exports.editItem = async (req, res) => {
       _id: req.params.id
     }
 
+    const findAll = {
+      deleted: false,
+    }
+
     const item = await Product.findOne(find)
+    const productCategory = await ProductCategory.find(findAll)
+    const newProductCategory = createTree(productCategory)
 
     res.render("admin/pages/products/edit.pug", {
       pageTitle: 'Chỉnh sửa sản phẩm',
-      singleItem: item
+      singleItem: item,
+      newProductCategory: newProductCategory
     })
   } catch (e) {
     req.flash('fail', 'Không tồn tại sản phẩm')
@@ -189,9 +213,9 @@ module.exports.editItemPatch = async (req, res) => {
   req.body.stock = parseInt(req.body.stock)
   req.body.position = parseInt(req.body.position)
 
-  if (req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`
-  }
+  // if (req.file) {
+  //   req.body.thumbnail = `/uploads/${req.file.filename}`
+  // }
 
   const id = req.params.id
   try {

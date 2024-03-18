@@ -1,5 +1,5 @@
-//Button status
 
+//Button status
 const btns = document.querySelectorAll('[button-status]')
 
 if (btns.length > 0) {
@@ -22,7 +22,6 @@ if (btns.length > 0) {
 
 
 //Form Search
-
 const searchBtn = document.querySelector('#forms-search')
 if (searchBtn) {
   let url = new URL(window.location.href)
@@ -43,7 +42,6 @@ if (searchBtn) {
 
 
 //Page button
-
 const pageBtns = document.querySelectorAll('[page-index]')
 
 if (pageBtns.length > 0) {
@@ -70,7 +68,6 @@ if (pageBtns.length > 0) {
 
 
 //Checkbox
-
 const boxMulti = document.querySelector('[checkbox-multi]')
 
 if (boxMulti) {
@@ -151,7 +148,6 @@ if (formChangeMulti) {
 }
 
 //Alert
-
 const showAlert = document.querySelector('[show-alert]')
 if (showAlert) {
   const closeBtn = document.querySelector('[close-alert]')
@@ -189,4 +185,34 @@ if (updateImage) {
     updateImageInput.value = ""
     updateImagePreview.src = ""
   }
+}
+
+//Sort
+const sortSelect = document.querySelector('[sort-select]')
+const sortClear = document.querySelector('[sort-clear]')
+
+if (sortSelect) {
+
+  let url = new URL(window.location.href)
+
+  sortSelect.onchange = (e) => {
+    const query = e.target.value
+    const arr = query.split("-")
+    const [sortKey, sortValue] = arr
+
+    url.searchParams.set('sortKey', sortKey)
+    url.searchParams.set('sortValue', sortValue)
+
+    window.location.href = url.href
+  }
+
+  const sortKey = url.searchParams.get('sortKey')
+  const sortValue = url.searchParams.get('sortValue')
+  const string = `${sortKey}-${sortValue}`
+
+  if (string) {
+    const sortOption = sortSelect.querySelector(`option[value=${string}]`)
+    sortOption.selected = true
+  }
+
 }

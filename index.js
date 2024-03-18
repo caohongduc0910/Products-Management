@@ -1,7 +1,7 @@
 
 const express = require('express')
+const path = require('path')
 const flash = require('express-flash')
-
 const route = require('./routes/client/index.route.js')
 const routeAdmin = require('./routes/admin/index.route.js')
 const methodOverride = require('method-override')
@@ -37,6 +37,9 @@ app.set('view engine', 'pug')
 
 //Public
 app.use(express.static(`${__dirname}/public`))
+
+//TinyMCE
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')))
 
 //App Local Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin
