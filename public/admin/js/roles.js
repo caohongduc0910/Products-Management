@@ -21,7 +21,7 @@ if (tablePermission) {
             permission: []
           })
         })
-      }else {
+      } else {
         inputs.forEach((input, index) => {
           const checked = input.checked
           if (checked) {
@@ -32,7 +32,7 @@ if (tablePermission) {
     })
     console.log(roles)
 
-    if(roles.length > 0){
+    if (roles.length > 0) {
       const formPermissions = document.querySelector('[form-change-permissions]')
       const inputPermissions = document.querySelector('input[name="permissions"]')
       inputPermissions.value = JSON.stringify(roles)
@@ -44,8 +44,18 @@ if (tablePermission) {
 //Permission Data Default
 
 const dataRoles = document.querySelector('[data-roles]')
-if(dataRoles) {
-  const input = dataRoles.getAttribute('data-role')
-  const permission = JSON.parse(input)
-  console.log(input)
+if (dataRoles) {
+  const data = dataRoles.getAttribute('data-roles')
+  const records = JSON.parse(data)
+  const tablePermission = document.querySelector('[table-permissions]')
+
+  records.forEach((record, index) => {
+    const permissions = record.permission
+
+    permissions.forEach(permission => {
+      const row = tablePermission.querySelector(`[data-name=${permission}]`)
+      const input = row.querySelectorAll('input')[index]
+      input.checked = true 
+    })
+  })
 }

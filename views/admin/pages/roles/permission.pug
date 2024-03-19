@@ -6,8 +6,10 @@ block main
   if(roles)
     div(data-roles=roles)
   
-
   h1(class="mb-4") Thêm mới quyền
+
+  +alertSuccess(5000)
+  +alertFail(5000)
 
   if(roles)
     div(class="text-right")
@@ -56,6 +58,61 @@ block main
               input(type="checkbox")
         tr(data-name="products-category_delete")
           td Xóa
+          each item in roles
+            td(class="text-center")
+              input(type="checkbox")
+
+        //- Danh sách sản phẩm
+        tr
+          td(colspan="3")
+            b Danh sách sản phẩm
+        tr(data-name="products_view")
+          td Xem
+          each item in roles
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="products_create")
+          td Thêm mới
+          each item in roles
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="products_edit")
+          td Chỉnh sửa
+          each item in roles
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="products_delete")
+          td Xóa
+          each item in roles
+            td(class="text-center")
+              input(type="checkbox")
+
+        //- Nhóm quyền
+        tr
+          td(colspan="3")
+            b Nhóm quyền
+        tr(data-name="roles_view")
+          td Xem
+          each item in roles
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="roles_create")
+          td Thêm mới
+          each item in roles
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="roles_edit")
+          td Chỉnh sửa
+          each item in roles
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="roles_delete")
+          td Xóa
+          each item in roles
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="roles_permissions")
+          td Phân quyền
           each item in roles
             td(class="text-center")
               input(type="checkbox")
