@@ -8,6 +8,7 @@ const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const expressSession = require('express-session')
+const moment = require('moment')
 
 require("dotenv").config()
 
@@ -28,8 +29,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 //flash
 app.use(cookieParser('keyboard cat'));
-app.use(expressSession({ cookie: { maxAge: 60000 }}));
-app.use(flash());   
+app.use(expressSession({ cookie: { maxAge: 60000 } }));
+app.use(flash());
 
 //Pug
 app.set('views', `${__dirname}/views`)
@@ -43,6 +44,7 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 
 //App Local Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin
+app.locals.moment = moment
 
 route(app)
 routeAdmin(app)

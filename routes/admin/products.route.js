@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const controller = require('../../controllers/admin/products.controller')
-const validateController = require('../../validates/admin/product.validate')
 const multer = require('multer')
+const upload = multer();
 // const storage = require('../../helpers/storageMulter')
 // const upload = multer({ storage: storage() });
-const upload = multer();
+const controller = require('../../controllers/admin/products.controller')
+const validateController = require('../../validates/admin/product.validate')
 const uploadCloud = require('../../middlewares/admin/uploadCloud.middleware')
 
 router.get('/', controller.index)

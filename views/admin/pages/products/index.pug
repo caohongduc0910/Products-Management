@@ -5,11 +5,13 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
+include ../../mixins/format-time.pug
 
 block main 
   h1 Danh sách sản phẩm
 
   +alertSuccess(5000)
+  +alertFail(5000)
 
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
@@ -49,7 +51,7 @@ block main
                 th Giá
                 th Vị trí
                 th Trạng thái
-                //- th Tạo bởi
+                th Tạo bởi
                 th Hành động
 
             tbody
@@ -81,24 +83,29 @@ block main
                       button-status = item.status
                       data-id = item.id
                       button-change-status
-                      class="badge text-bg-success"
+                      class="badge badge-success"
                       ) Hoạt động
                     else 
                       a(href="javascript:" 
                       button-status = item.status
                       data-id = item.id
                       button-change-status
-                      class="badge text-bg-danger"
+                      class="badge badge-danger"
                       ) Ngừng hoạt động
+                  td
+                    p #{item.fullName}
+                    //- p #{item.createdBy.createdAt}
+                    p 
+                      +formatTime(item.createdBy.createdAt)
                   td
                     a(
                     href=`${prefixAdmin}/products/detail/${item.id}`
                     class="btn btn-secondary btn-sm"
                     ) Chi tiết
                     a(href=`${prefixAdmin}/products/edit/${item.id}`
-                    class="btn btn-warning btn-sm ms-1"
+                    class="btn btn-warning btn-sm ml-1"
                     ) Sửa
-                    button(class="btn btn-danger btn-sm ms-1"
+                    button(class="btn btn-danger btn-sm ml-1"
                     button-delete
                     data-id=item.id
                     ) Xóa

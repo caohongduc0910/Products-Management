@@ -1,5 +1,6 @@
 const Product = require("../../models/product.model.js")
 const ProductCategory = require("../../models/products-categories.model.js")
+const Account = require("../../models/account.model.js")
 
 const systemConfig = require("../../config/prefix.js")
 
@@ -47,6 +48,18 @@ module.exports.index = async (req, res) => {
     .limit(objectPagination.limitItems)
     .skip(objectPagination.startItem) 
 
+  //CreatedBy
+  for(let product of products){
+    const user = await Account.findOne({
+      deleted: false,
+      _id: product.createdBy.account_id
+    })
+    console.log(user)
+    if(user){
+      product.fullName = user.fullName
+    }
+  }
+
   res.render("admin/pages/products/index.pug", {
     pageTitle: 'Danh sách sản phẩm',
     products: products,
@@ -73,7 +86,7 @@ module.exports.changeStatus = async (req, res) => {
 // [PATCH] admin/products/change-multi
 
 module.exports.changeMulti = async (req, res) => {
-  // console.log(req.body)
+
   const type = req.body.type
   const ids = req.body.ids.split(", ")
 
@@ -95,13 +108,15 @@ module.exports.changeMulti = async (req, res) => {
   else if (type == "delete-all") {
     await Product.updateMany({ _id: { $in: ids } }, {
       deleted: true,
-      deletedAt: new Date()
+      deletedBy: {
+        account_id: res.locals.user.id,
+        deletedAt: new Date()
+      }
     })
     req.flash('success', 'Xóa sản phẩm thành công');
 
   }
   else {
-
     for (const id of ids) {
       let [idItem, position] = id.split(" - ")
       position = parseInt(position)
@@ -109,6 +124,7 @@ module.exports.changeMulti = async (req, res) => {
         position: position
       })
     }
+    req.flash('success', 'Đổi thứ tự thành công');
   }
 
   res.redirect("back")
@@ -118,14 +134,15 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id
 
-  console.log(req.params)
-
   // await Product.deleteOne({_id: id})
   await Product.updateOne(
     { _id: id },
     {
       deleted: true,
-      deletedDate: new Date()
+      deletedBy: {
+        account_id: res.locals.user.id,
+        deletedAt: new Date()
+      }
     })
   req.flash('success', 'Xóa sản phẩm thành công')
   res.redirect("back")
@@ -150,11 +167,13 @@ module.exports.createGet = async (req, res) => {
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
 
-  console.log(req.body)
-
   req.body.price = parseInt(req.body.price)
   req.body.discountPercentage = parseInt(req.body.discountPercentage)
   req.body.stock = parseInt(req.body.stock)
+
+  req.body.createdBy = {
+    account_id: res.locals.user.id
+  } 
 
   // if (req.file) {
   //   req.body.thumbnail = `/uploads/${req.file.filename}`
@@ -168,8 +187,8 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position)
   }
 
-  const newProduct = new Product(req.body)
-  await newProduct.save()
+  // const newProduct = new Product(req.body)
+  // await newProduct.save()
 
   // console.log(req.file)
 
