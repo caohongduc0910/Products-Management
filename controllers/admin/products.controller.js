@@ -36,9 +36,9 @@ module.exports.index = async (req, res) => {
 
   //Sort
   let sort = {}
-  if(req.query.sortKey && req.query.sortValue) {
+  if (req.query.sortKey && req.query.sortValue) {
     sort[req.query.sortKey] = req.query.sortValue
-  }else {
+  } else {
     sort.position = "desc"
   }
 
@@ -46,17 +46,30 @@ module.exports.index = async (req, res) => {
   const products = await Product.find(find)
     .sort(sort)
     .limit(objectPagination.limitItems)
-    .skip(objectPagination.startItem) 
+    .skip(objectPagination.startItem)
 
-  //CreatedBy
-  for(let product of products){
+  //CreatedBy and UpdatedBy
+  for (let product of products) {
+
+    //User who created item
     const user = await Account.findOne({
       deleted: false,
       _id: product.createdBy.account_id
     })
-    console.log(user)
-    if(user){
+    if (user) {
       product.fullName = user.fullName
+    }
+
+    //User who updated item
+    const lastUserUpdate = product.updatedBy[product.updatedBy.length - 1]
+    if (lastUserUpdate) {
+      const accountUpdate = await Account.findOne({
+        deleted: false,
+        _id: lastUserUpdate.account_id
+      })
+      if (accountUpdate) {
+        product.fullNameUpdate = accountUpdate.fullName
+      }
     }
   }
 
@@ -78,7 +91,12 @@ module.exports.changeStatus = async (req, res) => {
 
   req.flash('success', 'Cập nhật trạng thái thành công');
 
-  await Product.updateOne({ _id: id }, { status: status })
+  let updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date()
+  }
+
+  await Product.updateOne({ _id: id }, { status: status, $push: { updatedBy: updatedBy }})
 
   res.redirect("back")
 }
@@ -90,21 +108,27 @@ module.exports.changeMulti = async (req, res) => {
   const type = req.body.type
   const ids = req.body.ids.split(", ")
 
+  let updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date()
+  }
+
   if (type == "active") {
     await Product.updateMany({ _id: { $in: ids } }, {
-      status: "active"
+      status: "active",
+      $push: { updatedBy: updatedBy }
     })
     req.flash('success', 'Cập nhật trạng thái thành công');
-
-
   }
+
   else if (type == "inactive") {
     await Product.updateMany({ _id: { $in: ids } }, {
-      status: "inactive"
+      status: "inactive",
+      $push: { updatedBy: updatedBy }
     })
     req.flash('success', 'Cập nhật trạng thái thành công');
-
   }
+
   else if (type == "delete-all") {
     await Product.updateMany({ _id: { $in: ids } }, {
       deleted: true,
@@ -114,14 +138,15 @@ module.exports.changeMulti = async (req, res) => {
       }
     })
     req.flash('success', 'Xóa sản phẩm thành công');
-
   }
+
   else {
     for (const id of ids) {
       let [idItem, position] = id.split(" - ")
       position = parseInt(position)
       await Product.updateOne({ _id: idItem }, {
-        position: position
+        position: position,
+        $push: { updatedBy: updatedBy }
       })
     }
     req.flash('success', 'Đổi thứ tự thành công');
@@ -173,7 +198,7 @@ module.exports.createPost = async (req, res) => {
 
   req.body.createdBy = {
     account_id: res.locals.user.id
-  } 
+  }
 
   // if (req.file) {
   //   req.body.thumbnail = `/uploads/${req.file.filename}`
@@ -187,13 +212,10 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position)
   }
 
-  // const newProduct = new Product(req.body)
-  // await newProduct.save()
-
-  // console.log(req.file)
+  const newProduct = new Product(req.body)
+  await newProduct.save()
 
   res.redirect(`${systemConfig.prefixAdmin}/products`)
-
 }
 
 // [GET] /admin/products/edit/:id
@@ -227,6 +249,8 @@ module.exports.editItem = async (req, res) => {
 // [PATCH] /admin/products/edit/:id
 module.exports.editItemPatch = async (req, res) => {
 
+  console.log(req.body)
+
   req.body.price = parseInt(req.body.price)
   req.body.discountPercentage = parseInt(req.body.discountPercentage)
   req.body.stock = parseInt(req.body.stock)
@@ -235,10 +259,17 @@ module.exports.editItemPatch = async (req, res) => {
   // if (req.file) {
   //   req.body.thumbnail = `/uploads/${req.file.filename}`
   // }
-
+  let updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date()
+  }
   const id = req.params.id
   try {
-    await Product.updateOne({ _id: id }, req.body)
+    // await Product.updateOne({ _id: id }, {...req.body, $push: {updatedBy: updatedBy}})
+    await Product.updateOne({ _id: id }, { 
+      $set: req.body, 
+      $push: { updatedBy: updatedBy } 
+    });
     req.flash('success', 'Cập nhật thành công')
   } catch (e) {
     req.flash('fail', 'Cập nhật thất bại')

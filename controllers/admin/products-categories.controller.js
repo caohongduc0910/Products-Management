@@ -78,6 +78,24 @@ module.exports.createPost = async (req, res) => {
 
 }
 
+//[PATCH] /admin/products-categories/change-status/:status/:id
+module.exports.changeStatus = async (req, res) => {
+  const id = req.params.id
+  const status = req.params.status
+
+  const updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date()
+  }
+  
+  await ProductCategory.updateOne({_id: id}, {
+    status: status,
+    updatedBy: updatedBy
+  })
+  
+  res.redirect('back')
+}
+
 // [GET] /admin/products-categories/edit/:id
 module.exports.edit = async (req, res) => {
 

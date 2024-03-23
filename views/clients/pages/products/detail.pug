@@ -1,38 +1,38 @@
-extends ../../layouts/default.pug
+//- extends ../../layouts/default.pug
 
-block main
-  .container.my-3
-    .row
-      .col-12
-        if(singleItem.title)
-          h1(class="mb-4") #{singleItem.title}
+//- block main
+//-   .container.my-3
+//-     .row
+//-       .col-12
+//-         if(singleItem.title)
+//-           h1(class="mb-4") #{singleItem.title}
 
-        if (singleItem.price)
-          div(class="mb-4") Giá: <b>#{singleItem.price}$</b>
+//-         if (singleItem.price)
+//-           div(class="mb-4") Giá: <b>#{singleItem.price}$</b>
 
-        if (singleItem.discountPercentage)
-          div(class="mb-4") Giảm giá: <b>#{singleItem.discountPercentage}%</b>
+//-         if (singleItem.discountPercentage)
+//-           div(class="mb-4") Giảm giá: <b>#{singleItem.discountPercentage}%</b>
 
-        if (singleItem.stock)
-          div(class="mb-4") Còn lại: <b>#{singleItem.stock}</b>
+//-         if (singleItem.stock)
+//-           div(class="mb-4") Còn lại: <b>#{singleItem.stock}</b>
 
-        if (singleItem.thumbnail)
-          div(class="mb-4")
-            img(
-              src=singleItem.thumbnail
-              style="width: 200px"
-            )
+//-         if (singleItem.thumbnail)
+//-           div(class="mb-4")
+//-             img(
+//-               src=singleItem.thumbnail
+//-               style="width: 200px"
+//-             )
 
-        if (singleItem.status)
-          div(class="mb-4")
-            span Trạng thái:
-            if (singleItem.status === "active")
-              span(class="badge text-bg-success ms-2") Hoạt động
-            else
-              span(class="badge text-bg-danger ms-2") Dừng hoạt động
+//-         if (singleItem.status)
+//-           div(class="mb-4")
+//-             span Trạng thái:
+//-             if (singleItem.status === "active")
+//-               span(class="badge text-bg-success ms-2") Hoạt động
+//-             else
+//-               span(class="badge text-bg-danger ms-2") Dừng hoạt động
 
-        if (singleItem.position)
-          div(class="mb-4") Vị trí: <b>#{singleItem.position}</b>
+//-         if (singleItem.position)
+//-           div(class="mb-4") Vị trí: <b>#{singleItem.position}</b>
 
-        if (singleItem.description)
-          div(class="mb-4") !{singleItem.description}
+//-         if (singleItem.description)
+//-           div(class="mb-4") !{singleItem.description}

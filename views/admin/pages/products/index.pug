@@ -52,6 +52,7 @@ block main
                 th Vị trí
                 th Trạng thái
                 th Tạo bởi
+                th Sửa bởi
                 th Hành động
 
             tbody
@@ -94,9 +95,12 @@ block main
                       ) Ngừng hoạt động
                   td
                     p #{item.fullName}
-                    //- p #{item.createdBy.createdAt}
                     p 
                       +formatTime(item.createdBy.createdAt)
+                  td
+                    p #{item.fullNameUpdate}
+                    p 
+                      +formatTime(item.updatedBy.updatedAt)
                   td
                     a(
                     href=`${prefixAdmin}/products/detail/${item.id}`
@@ -120,4 +124,7 @@ block main
   form(action=""
       id="form-delete"
       data-path=`${prefixAdmin}/products/delete/`
-      method="POST") 
+      method="POST")
+
+  
+      

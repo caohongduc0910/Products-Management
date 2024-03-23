@@ -21,6 +21,14 @@ block main
         style="width: 200px"
       )
 
+  if (singleItem.featured)
+    div(class="mb-4")
+      span Đặc điểm:
+      if (singleItem.featured === "1")
+        span(class="badge text-bg-success ms-2") Nổi bật
+      else
+        span(class="badge text-bg-danger ms-2") Không
+
   if (singleItem.status)
     div(class="mb-4")
       span Trạng thái:

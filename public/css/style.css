@@ -22,7 +22,6 @@
 .header .inner-menu>ul>li {
   margin-left: 20px;
 }
-
 /* End Header */
 
 /* Footer */
@@ -32,7 +31,6 @@
   text-align: center;
   padding: 10px;
 }
-
 /* End Footer */
 
 /* box-head */
@@ -46,10 +44,9 @@
   font-weight: 600;
   color: green;
 }
-
 /* End box-head */
 
-/* product-item */
+/* Product-item */
 .product-item {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -99,7 +96,6 @@
   padding: 3px 10px;
   border-radius: 8px;
 }
-
 /* End product-item */
 
 /* sub-menu */
@@ -204,11 +200,9 @@
   max-width: 100%;
   height: auto;
 }
-
 /* End product-detail */
 
 /* Show Alert */
-
 [show-alert] {
   position: fixed !important;
   top: 70px;
@@ -245,7 +239,6 @@
   border-radius: 50%;
   cursor: pointer;
 }
-
 /* End Show Alert */
 
 /* chat */
@@ -329,5 +322,4 @@
   padding: 0 10px;
   cursor: pointer;
 }
-
 /* End chat */

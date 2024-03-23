@@ -1,15 +1,18 @@
+include ../mixins/sub-menu.pug
+
 header.header
   .container
     .row.align-items-center
       .col-3
         .inner-logo
           a(href="/")
-            img(src="/images/logo.svg", alt="Logo")
+            img(src="https://api.watsons.vn/medias/Watsons-Vietnam.png?context=bWFzdGVyfHJvb3R8MzAxMXxpbWFnZS9wbmd8YUdJM0wyaGxNQzh4TVRjMk9UWTVOekEzTlRJek1DOVhZWFJ6YjI1ekxWWnBaWFJ1WVcwdWNHNW58MDZjOTgxYTIwNDQ4YjY3OTEyNmVhZGExNmYyMGE3YWRhYWYxODY1NjgxNTBlZWJjNGFkZTBmYWNlNjIyOWQzYg", alt="Logo")
 
       .col-9
         .inner-menu
           ul
             li
               a(href="/") Trang chủ
-            li
+            li(class="sub-menu")
               a(href="/products") Sản phẩm
+              +sub-menu(productCategories, "/products")

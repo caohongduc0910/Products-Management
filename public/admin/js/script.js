@@ -214,5 +214,4 @@ if (sortSelect) {
     const sortOption = sortSelect.querySelector(`option[value=${string}]`)
     sortOption.selected = true
   }
-
 }

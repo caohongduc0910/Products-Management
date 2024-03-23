@@ -1,7 +1,6 @@
 const Product = require('../../models/product.model')
 
-
-// [get] /products
+// [GET] /products
 module.exports.index = async (req, res) => {
 
     const products = await Product.find({
@@ -15,31 +14,29 @@ module.exports.index = async (req, res) => {
         return item
     })
 
-    // console.log(newProducts)
-
     res.render("clients/pages/products/index.pug", {
         pageTitle: 'Products',
-        products: newProducts
+        products: newProducts,
     })
 }
 
 // [GET] /products/detail/:id
-module.exports.detail = async (req, res) => {
-    try {
-      const find = {
-        deleted: false,
-        status: "active",
-        slug: req.params.slug
-      }
+// module.exports.detail = async (req, res) => {
+//     try {
+//       const find = {
+//         deleted: false,
+//         status: "active",
+//         slug: req.params.slug
+//       }
   
-      const item = await Product.findOne(find)
+//       const item = await Product.findOne(find)
   
-      res.render("clients/pages/products/detail.pug", {
-        pageTitle: item.title,
-        singleItem: item
-      })
-    } catch (e) {
-      req.flash('fail', 'Không tồn tại sản phẩm')
-      res.redirect(`/products`)
-    }
-  }
+//       res.render("clients/pages/products/detail.pug", {
+//         pageTitle: item.title,
+//         singleItem: item
+//       })
+//     } catch (e) {
+//       req.flash('fail', 'Không tồn tại sản phẩm')
+//       res.redirect(`/products`)
+//     }
+//   }

@@ -78,7 +78,7 @@ block main
                     class="badge badge-success"
                     ) Hoạt động
                   else 
-                    a(href="javascript:" 
+                    a(href="javascript:;" 
                     button-status = item.status
                     data-id = item.id
                     button-change-status
@@ -101,3 +101,12 @@ block main
         id="form-delete"
         data-path=`${prefixAdmin}/products-categories/delete/`
         method="POST")
+
+    form(action=""
+        id="form-change-status"
+        data-path=`${prefixAdmin}/products-categories/change-status`
+        method="POST") 
+
+    
+    
+    

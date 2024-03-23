@@ -8,6 +8,7 @@ const productsCategoriesRouter = require('./products-categories.route.js')
 const rolesRouter = require('./roles.route.js')
 const accountsRouter = require('./accounts.route.js')
 const authRouter = require('./auth.route.js')
+const myAccountRouter = require('./my-account.route.js')
 
 
 module.exports = function (app) {
@@ -39,4 +40,9 @@ module.exports = function (app) {
     )
 
   app.use(PATH_ADMIN + "/auth", authRouter)
+
+  app.use(PATH_ADMIN + "/my-account",
+    requireAuth.requireAuth,
+    myAccountRouter
+    )
 }

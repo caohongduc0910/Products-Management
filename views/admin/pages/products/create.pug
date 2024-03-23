@@ -23,6 +23,7 @@ block main
         name="title"
         required
       )
+
     div(class="form-group")
       label(for="product_category_id") Danh mục
       select(
@@ -33,25 +34,28 @@ block main
         option(value="") -- Chọn danh mục --
         if(newProductCategory)
           +select-tree(newProductCategory)
-    //- div(class="form-group form-check form-check-inline")
-    //-   input(
-    //-     type="radio"
-    //-     class="form-check-input"
-    //-     id="featured1"
-    //-     name="featured"
-    //-     value="1"
-    //-   )
-    //-   label(for="featured1" class="form-check-label") Nổi bật
-    //- div(class="form-group form-check form-check-inline")
-    //-   input(
-    //-     type="radio"
-    //-     class="form-check-input"
-    //-     id="featured0"
-    //-     name="featured"
-    //-     value="0"
-    //-     checked
-    //-   )
-    //-   label(for="featured0" class="form-check-label") Không
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="featured1"
+        name="featured"
+        value="1"
+      )
+      label(for="featured1" class="form-check-label") Nổi bật
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="featured0"
+        name="featured"
+        value="0"
+        checked
+      )
+      label(for="featured0" class="form-check-label") Không
+
     div(class="form-group")
       label(for="desc") Mô tả
       textarea(
@@ -61,6 +65,7 @@ block main
         rows="5"
         textarea-mce
       )
+
     div(class="form-group")
       label(for="price") Giá
       input(
@@ -71,6 +76,7 @@ block main
         value="0"
         min="0"
       )
+
     div(class="form-group")
       label(for="discount") % Giảm giá
       input(
@@ -81,6 +87,7 @@ block main
         value="0"
         min="0"
       )
+
     div(class="form-group")
       label(for="stock") Số lượng
       input(
@@ -91,6 +98,7 @@ block main
         value="0"
         min="0"
       )
+
     div(class="form-group" 
     upload-image
     )
@@ -109,6 +117,7 @@ block main
         upload-image-preview
       ) 
       <span close-preview>X</span>
+
     div(class="form-group")
       label(for="position") Vị trí
       input(
@@ -119,6 +128,7 @@ block main
         placeholder="Tự động tăng"
         min="1"
       )
+
     div(class="form-group form-check form-check-inline")
       input(
         type="radio"
@@ -129,6 +139,7 @@ block main
         checked
       )
       label(for="statusActive" class="form-check-label") Hoạt động
+
     div(class="form-group form-check form-check-inline")
       input(
         type="radio"
@@ -138,6 +149,7 @@ block main
         value="inactive"
       )
       label(for="statusInActive" class="form-check-label") Dừng hoạt động
+      
     div(class="form-group")
       button(
         type="submit"
