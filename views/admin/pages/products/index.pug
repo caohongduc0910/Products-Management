@@ -33,15 +33,15 @@ block main
 
       .card-body
         .row
-          .col-10 
+          .col-10
             +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
-          .col-2 
+          .col-2.text-right
             a(href=`${prefixAdmin}/products/create`
-            class="btn btn-outline-success") +Thêm mới
+            class="btn btn-success") ➕Thêm mới
 
           table(class = 'table table-hover table-sm'
             checkbox-multi)
-            thead
+            thead(class="thead-light")
               tr
                 th
                   input(type="checkbox" name="checkall")
@@ -69,7 +69,7 @@ block main
                       height="auto"
                     )
                   td #{item.title}
-                  td #{item.price}$
+                  td #{item.price}đ
                   td
                     input(
                       type="number"
@@ -87,7 +87,7 @@ block main
                       class="badge badge-success"
                       ) Hoạt động
                     else 
-                      a(href="javascript:" 
+                      a(href="javascript:;" 
                       button-status = item.status
                       data-id = item.id
                       button-change-status

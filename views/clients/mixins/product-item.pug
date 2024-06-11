@@ -1,0 +1,28 @@
+mixin product-item(item)
+  .col-3.mb-5
+    .product-item
+      .inner-image
+        img(src=item.thumbnail, alt=item.title)
+        if(item.featured == "1")
+          .inner-featured Nổi bật
+      .inner-content
+        h3.inner-title
+          a(href= `/products/detail/${item.slug}`) #{item.title}
+        .inner-price-new #{item.newPrice}đ
+        .inner-price-old #{item.price}đ
+        .inner-discount -#{item.discountPercentage}%
+        form(
+            action=`/cart/add/${item.id}`
+            method="POST"
+          )
+            input(
+              class="form-control mb-2 d-none"
+              type="number"
+              name="quantity"
+              value="1"
+            )
+            button(
+              type="submit"
+              class="btn btn-success btn-block"
+              style="margin-top:8px;"
+            ) Thêm vào giỏ hàng

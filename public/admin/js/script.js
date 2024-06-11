@@ -23,6 +23,7 @@ if (btns.length > 0) {
 
 //Form Search
 const searchBtn = document.querySelector('#forms-search')
+
 if (searchBtn) {
   let url = new URL(window.location.href)
 
@@ -71,7 +72,6 @@ if (pageBtns.length > 0) {
 const boxMulti = document.querySelector('[checkbox-multi]')
 
 if (boxMulti) {
-
   const checkBoxMulti = document.querySelector('input[name="checkall"]')
   const checkBoxOnes = document.querySelectorAll('input[name="id"]')
 
@@ -119,36 +119,31 @@ if (formChangeMulti) {
 
     const boxChecked = document.querySelectorAll('input[name="id"]:checked')
     const formArea = document.querySelector('input[name="ids"]')
+
     if (boxChecked.length > 0) {
       let ids = []
       boxChecked.forEach((box) => {
-
         const id = box.value
-
         if (typeChange == "change-position") {
           const position = box.closest("tr").querySelector('input[name="position"]').value
           ids.push(`${id} - ${position}`)
-
         } else {
           ids.push(id)
         }
-
       })
 
       ids = ids.join(", ")
       formArea.value = ids
-
       formChangeMulti.submit()
-
     } else {
       alert("Chọn ít nhất 1 sản phẩm để tiếp tục")
     }
-
   })
 }
 
 //Alert
 const showAlert = document.querySelector('[show-alert]')
+
 if (showAlert) {
   const closeBtn = document.querySelector('[close-alert]')
   const time = parseInt(showAlert.getAttribute('data-time'))
@@ -163,9 +158,7 @@ if (showAlert) {
   }
 }
 
-
 //Img preview
-
 const updateImage = document.querySelector('[upload-image]')
 const updateImageInput = document.querySelector('[upload-image-input]')
 const updateImagePreview = document.querySelector('[upload-image-preview]')
@@ -173,7 +166,6 @@ const closePreviewBtn = document.querySelector('[close-preview]')
 
 if (updateImage) {
   updateImageInput.addEventListener('change', (e) => {
-
     console.log(e.target.files)
     const fileName = e.target.files[0]
     if (fileName) {

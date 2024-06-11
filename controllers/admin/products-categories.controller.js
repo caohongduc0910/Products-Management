@@ -59,7 +59,6 @@ module.exports.create = async (req, res) => {
   })
 }
 
-
 // [POST] /admin/products-categories/create
 module.exports.createPost = async (req, res) => {
 
@@ -92,9 +91,63 @@ module.exports.changeStatus = async (req, res) => {
     status: status,
     updatedBy: updatedBy
   })
-  
+
   res.redirect('back')
 }
+
+// [PATCH] /admin/products-categories/change-multi
+module.exports.changeMulti = async (req, res) => {
+
+  const type = req.body.type
+  const ids = req.body.ids.split(", ")
+
+  let updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date()
+  }
+
+  if (type == "active") {
+    await ProductCategory.updateMany({ _id: { $in: ids } }, {
+      status: "active",
+      $push: { updatedBy: updatedBy }
+    })
+    req.flash('success', 'Cập nhật trạng thái thành công');
+  }
+
+  else if (type == "inactive") {
+    await ProductCategory.updateMany({ _id: { $in: ids } }, {
+      status: "inactive",
+      $push: { updatedBy: updatedBy }
+    })
+    req.flash('success', 'Cập nhật trạng thái thành công');
+  }
+
+  else if (type == "delete-all") {
+    await ProductCategory.updateMany({ _id: { $in: ids } }, {
+      deleted: true,
+      deletedBy: {
+        account_id: res.locals.user.id,
+        deletedAt: new Date()
+      }
+    })
+    req.flash('success', 'Xóa sản phẩm thành công');
+  }
+
+  else {
+    for (const id of ids) {
+      let [idItem, position] = id.split(" - ")
+      position = parseInt(position)
+      await ProductCategory.updateOne({ _id: idItem }, {
+        position: position,
+        $push: { updatedBy: updatedBy }
+      })
+    }
+    req.flash('success', 'Đổi thứ tự thành công');
+  }
+
+  res.redirect("back")
+}
+
 
 // [GET] /admin/products-categories/edit/:id
 module.exports.edit = async (req, res) => {
@@ -154,7 +207,7 @@ module.exports.detail = async (req, res) => {
 
 }
 
-// [PATCH] admin/products-categories/delete/:id
+// [DELETE] admin/products-categories/delete/:id
 module.exports.deleteItem = async (req, res) => {
 
   await ProductCategory.updateOne(

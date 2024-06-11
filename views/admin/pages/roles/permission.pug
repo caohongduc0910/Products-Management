@@ -23,7 +23,7 @@ block main
       class="table table-hover table-sm"
       table-permissions
     )
-      thead
+      thead(class="thead-light")
         tr
           th Tính năng
           each item in roles
@@ -152,7 +152,6 @@ block main
         type="text"
         class="form-control d-none"
         name="permissions"
-
       )
 
-  script(src="/admin/js/roles.js") 
+  script(src="/admin/js/permissions.js") 

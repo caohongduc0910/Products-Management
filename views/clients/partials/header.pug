@@ -3,12 +3,39 @@ include ../mixins/sub-menu.pug
 header.header
   .container
     .row.align-items-center
-      .col-3
+      .col-4
         .inner-logo
           a(href="/")
-            img(src="https://api.watsons.vn/medias/Watsons-Vietnam.png?context=bWFzdGVyfHJvb3R8MzAxMXxpbWFnZS9wbmd8YUdJM0wyaGxNQzh4TVRjMk9UWTVOekEzTlRJek1DOVhZWFJ6YjI1ekxWWnBaWFJ1WVcwdWNHNW58MDZjOTgxYTIwNDQ4YjY3OTEyNmVhZGExNmYyMGE3YWRhYWYxODY1NjgxNTBlZWJjNGFkZTBmYWNlNjIyOWQzYg", alt="Logo")
+            if(!setting.logo)
+              img(src="https://api.watsons.vn/medias/Watsons-Vietnam.png?context=bWFzdGVyfHJvb3R8MzAxMXxpbWFnZS9wbmd8YUdJM0wyaGxNQzh4TVRjMk9UWTVOekEzTlRJek1DOVhZWFJ6YjI1ekxWWnBaWFJ1WVcwdWNHNW58MDZjOTgxYTIwNDQ4YjY3OTEyNmVhZGExNmYyMGE3YWRhYWYxODY1NjgxNTBlZWJjNGFkZTBmYWNlNjIyOWQzYg", alt="Logo")
+            else 
+              img(src=setting.logo)
 
-      .col-9
+      .col-4.col-md-6.col-lg-4
+        form(
+          action='/search' 
+          method='GET'
+        )
+          .input-group
+            input.form-control.rounded-left(
+              type='text' 
+              placeholder='🔍 Nhập từ khóa...' 
+              list='datalistOptions' 
+              name='keyword' 
+              value=''
+            )
+            datalist#datalistOptions
+              option(value='Sữa rửa mặt')
+              option(value='The Ordinary')
+              option(value='TO')
+              option(value='Bio')
+              option(value='Tẩy da chết')
+            .input-group-append
+              button.btn.btn-primary.rounded-right(type='submit') T&igrave;m
+
+
+
+      .col-4
         .inner-menu
           ul
             li
@@ -16,3 +43,24 @@ header.header
             li(class="sub-menu")
               a(href="/products") Sản phẩm
               +sub-menu(productCategories, "/products")
+            li 
+              if(cart.productsInTotal)
+                a(href="/cart") Giỏ hàng(#{cart.productsInTotal})
+              else
+                a(href="/cart") Giỏ hàng(0)
+            
+            if(user)
+              li
+                a(href="/rooms-chat") Phòng Chat
+              li
+                a(href="/users/friends") Bạn bè
+              li
+                a(href="/user/info") #{user.fullName}
+              li
+                a(href="/user/logout") Đăng xuất
+            else
+              li
+                a(href="/user/login") Đăng nhập
+              li
+                a(href="/user/register") Đăng kí
+            

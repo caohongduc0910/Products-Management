@@ -4,4 +4,4 @@ mixin sub-menu(items, path)
       li
         a(href=`${path}/${item.slug}`) #{item.title}
         if(item.children && item.children.length > 0)
-          +sub-menu(item.children)
+          +sub-menu(item.children, path)

@@ -1,2 +1,32 @@
-footer.footer
-  Copyright Copyright 2024
+footer(class="footer")
+  footer.bg-light.text-dark.pt-5.pb-4
+    .container.text-center.text-md-left
+      .row
+        // About Us Column
+        .col-md-4.col-lg-4.col-xl-4.mx-auto.mt-3.text-center
+          h5.text-uppercase.mb-4.font-weight-bold V&#x1EC1; Ch&uacute;ng T&ocirc;i
+          p
+            | Nh&atilde;n h&agrave;ng c&#x1EE7;a ch&uacute;ng t&ocirc;i chuy&ecirc;n cung c&#x1EA5;p c&aacute;c s&#x1EA3;n ph&#x1EA9;m ch&#x1EA5;t l&#x1B0;&#x1EE3;ng cao, ph&#x1EE5;c v&#x1EE5; nhu c&#x1EA7;u c&#x1EE7;a kh&aacute;ch h&agrave;ng v&#x1EDB;i ti&ecirc;u ch&iacute; h&agrave;ng &dstrok;&#x1EA7;u l&agrave; s&#x1EF1; h&agrave;i l&ograve;ng v&agrave; tin t&#x1B0;&#x1EDF;ng.
+        // Policies and Rights Column
+        .col-md-4.col-lg-4.col-xl-4.mx-auto.mt-3.text-center
+          h5.text-uppercase.mb-4.font-weight-bold Ch&iacute;nh S&aacute;ch v&agrave; Quy&#x1EC1;n
+          ul.list-unstyled
+            li.my-2
+              a(href='#') Ch&iacute;nh S&aacute;ch B&#x1EA3;o M&#x1EAD;t
+            li.my-2
+              a(href='#') &Dstrok;i&#x1EC1;u Kho&#x1EA3;n S&#x1EED; D&#x1EE5;ng
+            li.my-2
+              a(href='#') Quy&#x1EC1;n Ri&ecirc;ng T&#x1B0;
+            li.my-2
+              a(href='#') Ch&iacute;nh S&aacute;ch &Dstrok;&#x1ED5;i Tr&#x1EA3;
+        // Map Column
+        .col-md-4.col-lg-4.col-xl-4.mx-auto.mt-3.text-center
+          h5.text-uppercase.mb-4.font-weight-bold B&#x1EA3;n &Dstrok;&#x1ED3;
+          .map-responsive
+            iframe(src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345096825!2d144.9537353153186!3d-37.816279179751554!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b6dbb8cf0980!2sEnvato!5e0!3m2!1sen!2sau!4v1480416824201' width='100%' height='200' frameborder='0' style='border:0;' allowfullscreen='' aria-hidden='false' tabindex='0')
+
+      .row
+        if(setting.copyright)
+          Copyright #{setting.copyright}
+        else 
+          Copyright Copyright 2024

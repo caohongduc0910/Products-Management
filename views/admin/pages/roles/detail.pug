@@ -1,0 +1,13 @@
+extends ../../layouts/default.pug
+
+block main
+  if(singleItem.title)
+    h1(class="mb-4") #{singleItem.title}
+
+  if (singleItem.description)
+    div(class="mb-4") !{singleItem.description}
+
+  a(
+    href=`${prefixAdmin}/roles/edit/${singleItem.id}`
+    class="btn btn-warning"
+  ) Chỉnh sửa

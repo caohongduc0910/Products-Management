@@ -1,2 +1,3 @@
 mixin formatTime(time)
-  span #{moment(time).format('D/MM/YYYY HH:mm:ss')}
+  div #{moment(time).format('DD/MM/YYYY')}
+  div #{moment(time).format('HH:mm:ss')}

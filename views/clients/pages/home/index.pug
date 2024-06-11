@@ -1,4 +1,21 @@
-extends ../../layouts/default.pug
+extends ../../layouts/default.pug 
+include ../../mixins/box-head.pug
+include ../../mixins/product-grid.pug
+include ../../mixins/alert.pug
 
 block main 
-    h1 Trang chủ
+    +alertSuccess(5000)
+    .container.my-3
+        .row
+            .col-12
+                +box-head("Sản phẩm nổi bật")
+
+        .row
+            +product-grid(productsFeatured)
+
+        .row
+            .col-12
+                +box-head("Sản phẩm mới nhất")
+
+        .row
+            +product-grid(products)

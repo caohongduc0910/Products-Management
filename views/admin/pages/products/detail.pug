@@ -2,48 +2,65 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
-  if(singleItem.title)
-    h1(class="mb-4") #{singleItem.title}
+  .container.my-4
+    h1(class="mb-4") Chi tiết sản phẩm
 
-  if (singleItem.price)
-    div(class="mb-4") Giá: <b>#{singleItem.price}$</b>
+    if (singleItem.thumbnail)
+      div(class="mb-4")
+        img(
+          src=singleItem.thumbnail
+          style="width: 200px"
+        )
+    .row
+      .col-10 
+      .col-2
+        .text-right.my-2
+          a(
+            href=`${prefixAdmin}/order/edit/${singleItem.id}`
+            class="btn btn-warning"
+          ) Chỉnh sửa
 
-  if (singleItem.discountPercentage)
-    div(class="mb-4") Giảm giá: <b>#{singleItem.discountPercentage}%</b>
+    .row
+      .col-12
+        table(class="table table-bordered")
+          thead(class="thead-light")
+            tr
+              th Vị trí
+              th Tên sản phẩm
+              th Giá
+              th Giảm giá
+              th Còn lại 
+              th Đặc điểm 
+              th Trạng thái
+          tbody 
+            tr 
+              td 
+                if (singleItem.position) 
+                  span #{singleItem.position}
+              td 
+                if (singleItem.title) 
+                  span #{singleItem.title}
+              td 
+                if (singleItem.price) 
+                  span #{singleItem.price}đ
+              td 
+                if (singleItem.discountPercentage) 
+                  span #{singleItem.discountPercentage}%
+              td 
+                if (singleItem.stock) 
+                  span #{singleItem.stock}
+              td 
+                if (singleItem.featured)
+                    if (singleItem.featured === "1")
+                      span(class="badge badge-success") Nổi bật
+                    else
+                      span(class="badge badge-danger") Không
+              td
+                if (singleItem.status)
+                  if (singleItem.status === "active")
+                    span(class="badge badge-success") Hoạt động
+                  else
+                    span(class="badge badge-danger") Dừng hoạt động
 
-  if (singleItem.stock)
-    div(class="mb-4") Còn lại: <b>#{singleItem.stock}</b>
-
-  if (singleItem.thumbnail)
-    div(class="mb-4")
-      img(
-        src=singleItem.thumbnail
-        style="width: 200px"
-      )
-
-  if (singleItem.featured)
-    div(class="mb-4")
-      span Đặc điểm:
-      if (singleItem.featured === "1")
-        span(class="badge text-bg-success ms-2") Nổi bật
-      else
-        span(class="badge text-bg-danger ms-2") Không
-
-  if (singleItem.status)
-    div(class="mb-4")
-      span Trạng thái:
-      if (singleItem.status === "active")
-        span(class="badge text-bg-success ms-2") Hoạt động
-      else
-        span(class="badge text-bg-danger ms-2") Dừng hoạt động
-
-  if (singleItem.position)
-    div(class="mb-4") Vị trí: <b>#{singleItem.position}</b>
-
-  if (singleItem.description)
-    div(class="mb-4") !{singleItem.description}
-
-  a(
-    href=`${prefixAdmin}/products/edit/${singleItem.id}`
-    class="btn btn-warning"
-  ) Chỉnh sửa
+    if (singleItem.description)
+      div(class="mb-4") !{singleItem.description}

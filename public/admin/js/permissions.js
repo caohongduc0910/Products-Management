@@ -11,7 +11,6 @@ if (tablePermission) {
 
     rows.forEach(row => {
       const name = row.getAttribute('data-name')
-
       const inputs = row.querySelectorAll('input')
       if (name == "id") {
         inputs.forEach(input => {

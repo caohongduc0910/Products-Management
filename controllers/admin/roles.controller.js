@@ -5,11 +5,9 @@ const systemConfig = require('../../config/prefix')
 // [GET] /admin/roles
 module.exports.index = async (req, res) => {
 
-  let find = {
+  const roles = await Role.find({
     deleted: false
-  }
-
-  const roles = await Role.find(find)
+  })
 
   res.render("admin/pages/roles/index.pug", {
     pageTitle: 'Trang nhóm quyền',
@@ -47,8 +45,6 @@ module.exports.edit = async (req, res) => {
     pageTitle: 'Chỉnh sửa quyền',
     singleItem: singleItem,
   })
-
-  // res.redirect(`${systemConfig.prefixAdmin}/roles`)
 }
 
 // [GET] /admin/roles/editPatch/:id
@@ -67,31 +63,72 @@ module.exports.editPatch = async (req, res) => {
 
 // [GET] /admin/roles/permisson
 module.exports.permission = async (req, res) => {
-
-  let find = {
-    deleted: false,
+  if(res.locals.role.permission.includes("roles_permissions")){
+    let find = {
+      deleted: false,
+    }
+  
+    const roles = await Role.find(find)
+  
+    res.render("admin/pages/roles/permission", {
+      pageTitle: 'Trang phân quyền',
+      roles: roles,
+    })
   }
-
-  const roles = await Role.find(find)
-
-  res.render("admin/pages/roles/permission", {
-    pageTitle: 'Trang phân quyền',
-    roles: roles,
-  })
+  else{
+    res.redirect(`${systemConfig.prefixAdmin}/roles`) 
+  }
 }
 
 // [PATCH] /admin/roles/permisson
 module.exports.permissionPatch = async (req, res) => {
-
-  try {
-    const permissions = JSON.parse(req.body.permissions)
-    for (let permission of permissions) {
-      await Role.updateOne({ _id: permission.id }, { permission: permission.permission })
+  
+  if(res.locals.role.permission.includes("roles-permissions")){
+    try {
+      const permissions = JSON.parse(req.body.permissions)
+      for (let permission of permissions) {
+        await Role.updateOne({ _id: permission.id }, { permission: permission.permission })
+      }
+    } catch(e) {
+      req.flash('fail', 'Cập nhật không thành công')
+      res.redirect('back')
     }
-  } catch(e) {
-    req.flash('fail', 'Cập nhật không thành công')
-    res.redirect('back')
+    req.flash('success', 'Cập nhật thành công')
+    res.redirect(`back`)
   }
-  req.flash('success', 'Cập nhật thành công')
-  res.redirect(`back`)
+  else{
+    res.send("Không có quyền thực hiện hành đông!")
+  }
 }
+
+// [GET] /admin/roles/detail
+module.exports.detail = async (req, res) => {
+
+    const role = await Role.findOne({
+      deleted: false,
+      _id: req.params.id
+    })
+
+    res.render('admin/pages/roles/detail', {
+      pageTitle: "Chi tiết quyền",
+      singleItem: role
+    })
+}
+
+// [DELETE] /admin/roles/delete/:id
+module.exports.delete = async (req, res) => {
+
+  const id = req.params.id
+
+  let deletedBy = {
+    account_id: id,
+    deletedAt: new Date()
+  }
+
+  await Role.updateOne({_id: id}, {
+    deleted: true,
+    $push: { deletedBy: deletedBy }
+  })
+
+  res.redirect(`back`)
+} 

@@ -10,7 +10,6 @@ const paginationHelper = require("../../helpers/pagination.js")
 const createTree = require("../../helpers/create-tree.js")
 
 // [GET] /admin/products
-
 module.exports.index = async (req, res) => {
 
   const filterStatus = filterStatusHelper(req.query)  //Filter
@@ -84,7 +83,6 @@ module.exports.index = async (req, res) => {
 }
 
 // [PATCH] admin/products/change-status/:status/:id
-
 module.exports.changeStatus = async (req, res) => {
   const id = req.params.id
   const status = req.params.status
@@ -96,13 +94,19 @@ module.exports.changeStatus = async (req, res) => {
     updatedAt: new Date()
   }
 
-  await Product.updateOne({ _id: id }, { status: status, $push: { updatedBy: updatedBy }})
+  await Product.updateOne(
+    {
+      _id: id
+    },
+    {
+      status: status,
+      $push: { updatedBy: updatedBy }
+    })
 
   res.redirect("back")
 }
 
 // [PATCH] admin/products/change-multi
-
 module.exports.changeMulti = async (req, res) => {
 
   const type = req.body.type
@@ -155,22 +159,27 @@ module.exports.changeMulti = async (req, res) => {
   res.redirect("back")
 }
 
-// [PATCH] admin/products/delete/:id
+// [DELETE] admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
-  const id = req.params.id
-
-  // await Product.deleteOne({_id: id})
-  await Product.updateOne(
-    { _id: id },
-    {
-      deleted: true,
-      deletedBy: {
-        account_id: res.locals.user.id,
-        deletedAt: new Date()
+  const permission = res.locals.role.permission
+  if (permission.include('products_delete')) {
+    // await Product.deleteOne({_id: id})
+    await Product.updateOne(
+      { _id: req.params.id },
+      {
+        deleted: true,
+        deletedBy: {
+          account_id: res.locals.user.id,
+          deletedAt: new Date()
+        }
       }
-    })
-  req.flash('success', 'Xóa sản phẩm thành công')
-  res.redirect("back")
+    )
+    req.flash('success', 'Xóa sản phẩm thành công')
+    res.redirect("back")
+  }
+  else {
+    res.send("Không có quyền thực hiện hành động này")
+  }
 }
 
 // [GET] /admin/products/create
@@ -266,9 +275,9 @@ module.exports.editItemPatch = async (req, res) => {
   const id = req.params.id
   try {
     // await Product.updateOne({ _id: id }, {...req.body, $push: {updatedBy: updatedBy}})
-    await Product.updateOne({ _id: id }, { 
-      $set: req.body, 
-      $push: { updatedBy: updatedBy } 
+    await Product.updateOne({ _id: id }, {
+      $set: req.body,
+      $push: { updatedBy: updatedBy }
     });
     req.flash('success', 'Cập nhật thành công')
   } catch (e) {
